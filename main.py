@@ -41,6 +41,30 @@ punchline at the end:
    mailman himself barely appears.
 
 Winner: candidate 3.
+
+Why the winner beats each rival, criterion by criterion
+(the judge weighs these in order):
+
+- On subject: all five are dog reviews of the mailman, so the
+  contest is decided by the later criteria, not this one.
+- Dog's side of the visit: candidate 3 shows suspicion ("sneaks
+  up"), a daily grievance (paper shoved through the door), and
+  a thwarted dog goal (could not sniff him properly). Only
+  candidate 5 matches it on triumph, and 5 gives the mailman
+  almost no role.
+- Dog voice: "sniff", "Coward", "would bark again" are a dog's
+  words. Candidates 2 ("cardio") and 5 ("shift") slip into
+  human vocabulary, which the judge penalises.
+- Turn at the end: "One star, would bark again" is a review
+  punchline in the review's own format. Candidate 1 ends on a
+  shrug and candidate 4 ends on a lecture.
+- Specific to this mailman: the paper through the door, the
+  fleeing before a sniff, and the daily repeat are all mailman
+  habits, not a generic stranger at the door.
+
+Length check: the winner is 131 characters, safely under the
+200 character gate, and one line with no trailing newline in
+the file content itself.
 """
 
 import os
@@ -53,8 +77,21 @@ WINNER = (
 )
 
 
+def validate_length(text: str, limit: int = 200) -> int:
+    """Return the character count, raising if over the gate limit."""
+    count = len(text)
+    if count < 1 or count > limit:
+        raise ValueError(f"Entry is {count} characters, must be 1 to {limit}")
+    if not text.strip():
+        raise ValueError("Entry must not be only white space")
+    if "\n" in text:
+        raise ValueError("Entry must be a single line")
+    return count
+
+
 def write_entry() -> Path:
     """Write the winning line to entry.txt and return its path."""
+    validate_length(WINNER)
     out_dir = Path(os.environ.get("OUTPUT_DIR", "/output"))
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / "entry.txt"
